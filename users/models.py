@@ -9,4 +9,3 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
 
     REQUIRED_FIELDS = ["email", "first_name", "last_name", "birthdate"]
-

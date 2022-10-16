@@ -21,3 +21,7 @@ class UserSerializer(serializers.Serializer):
 
         return user
 
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
