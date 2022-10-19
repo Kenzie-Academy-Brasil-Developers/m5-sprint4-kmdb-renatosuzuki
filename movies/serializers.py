@@ -1,4 +1,3 @@
-from pydoc import synopsis
 from rest_framework import serializers
 from .models import Movie
 from genres.serializers import GenreSerializer
@@ -25,3 +24,19 @@ class MovieSerializer(serializers.Serializer):
             movie.genres.add(genre)
 
         return movie
+
+
+    def update(self, instance, validate_data):
+        instance.genres.clear()
+
+        for key, value in validate_data.items():
+            if key == "genres":
+                for genres in value:
+                    genre, _ = Genre.objects.get_or_create(**genres)
+                    instance.genres.add(genre)
+            else:
+                setattr(instance, key, value)
+
+        instance.save()
+
+        return instance

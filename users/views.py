@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
 from .models import User
+
 
 class UserView(APIView):
     def post(self, request: Request) -> Response:
@@ -35,7 +37,7 @@ class LoginView(APIView):
             return Response({"detail": "invalid username or password"}, status.HTTP_400_BAD_REQUEST)
 
 
-class UserListAllView(APIView):
+class UserListAllView(APIView, PageNumberPagination):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
 
@@ -46,9 +48,11 @@ class UserListAllView(APIView):
         if not users:
             return Response({"details": "Not found"}, status.HTTP_404_NOT_FOUND)
 
-        users_serializer = UserSerializer(users, many=True)
+        result_page = self.paginate_queryset(users, request, view=self)
 
-        return Response(users_serializer.data, status.HTTP_200_OK)
+        serializer = UserSerializer(result_page, many=True)
+
+        return self.get_paginated_response(serializer.data)
 
 
 class UserListByIdView(APIView):

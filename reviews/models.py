@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class RecomendationChoice(models.TextChoices):
@@ -9,7 +10,7 @@ class RecomendationChoice(models.TextChoices):
 
 
 class Review(models.Model):
-    stars = models.IntegerField()
+    stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
     review = models.TextField()
     spoilers = models.BooleanField(null=True, default=False)
     recomendation = models.CharField(max_length=50, choices=RecomendationChoice.choices, default=RecomendationChoice.NO_OPINION)
