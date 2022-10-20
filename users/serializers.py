@@ -14,6 +14,7 @@ class UserSerializer(serializers.Serializer):
     bio = serializers.CharField(required=False)
     is_critic = serializers.BooleanField(required=False)
     updated_at = serializers.DateTimeField(read_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
 
 
     def create(self, validated_data:dict) -> User:

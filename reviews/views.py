@@ -17,10 +17,10 @@ class ReviewView(APIView, PageNumberPagination):
         movie = get_object_or_404(Movie, id=movie_id)
         check_review = Review.objects.filter(movie_id=movie.id, critic_user=request.user).exists()
 
-        
 
         if check_review:
             return Response({"detail": "Review already exists."}, status.HTTP_403_FORBIDDEN)
+
 
         serializer = ReviewSerializer(data=request.data)
 
